@@ -4,12 +4,11 @@
 
 # include <iostream>
 # include <cstdlib>
-# include <cmath>
 # include <ctime>
+# include <cmath>
 # include <vector>
 
 #pragma once
-
 
 class	Input
 {
@@ -24,11 +23,11 @@ class	Input
 
 		void			randomWeights(void);
 		void			initWeights(const std::vector<float>& weights);
+		void			initValue(const float& value) { _value = value; }
 
 		size_t			getNbrWeights(void) const { return _weights.size(); };
 		float			getValue(void) const { return _value; };
-
-		const float&		operator[](const size_t& index) const;
+		float			getWeight(const size_t& index) const;
 
 		class			OutOfRange : public std::exception 	
 		{

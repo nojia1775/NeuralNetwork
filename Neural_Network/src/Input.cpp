@@ -13,7 +13,7 @@ Input::Input(const Input& other)
 	try
 	{
 		for (size_t i = 0 ; i < other.getNbrWeights() ; i++)
-			_weights.push_back(other[i]);
+			_weights.push_back(other.getWeight(i));
 	}
 	catch (const std::exception& e)
 	{
@@ -28,24 +28,24 @@ Input&	Input::operator=(const Input& other)
 		_value = other.getValue();
 		_weights.clear();
 		for (size_t i = 0 ; i < other.getNbrWeights() ; i++)
-			_weights.push_back(other[i]);
+			_weights.push_back(other.getWeight(i));
 	}
 	return *this;
 }
 
-const float&	Input::operator[](const size_t& index) const
+float	Input::getWeight(const size_t& index) const
 {
 	if (index < getNbrWeights())
 		return _weights[index];
 	throw OutOfRange();
-	return -1.0f;
+	return -1.0;
 }
 
 void	Input::randomWeights(void)
 {
 	std::srand(std::time(NULL));
 	for (size_t i = 0 ; i < getNbrWeights() ; i++)
-		_weights[i] = static_cast<float>(std::rand()) / RAND_MAX - 1;
+		_weights[i] = static_cast<float>(std::rand()) / RAND_MAX * 2 - 1;
 }
 
 void	Input::initWeights(const std::vector<float>& weights)

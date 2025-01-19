@@ -7,8 +7,9 @@
 # include <ctime>
 # include <cmath>
 # include <vector>
+# include "Input.hpp"
 
-#pragma once
+# pragma once
 
 class	HiddenCell
 {
@@ -16,19 +17,23 @@ class	HiddenCell
 		float			_value;
 		std::vector<float>	_weights;
 		float			_bias;
+		size_t			_index;
 
 	public:
-					HiddenCell(const size_t& nbrWeights);
+					HiddenCell(const size_t& nbrWeights, const size_t& index);
 					HiddenCell(const HiddenCell& other);
 		HiddenCell&		operator=(const HiddenCell& other);
 
 		void			randomWeights(void);
+		void			computeValue(const std::vector<Input>& inputs, float (*activation)(float));
+		void			computeValue(const std::vector<HiddenCell>& cells, float (*activation)(float));
 
 		float			getValue(void) const { return _value; }
 		float			getBias(void) const { return _bias; }
 		size_t			getNbrWeights(void) const { return _weights.size(); }
-
-		const float&		operator[](const size_t& index) const;
+		float			getWeight(const size_t& index) const;
+		size_t			getIndex(void) const { return _index; }
+		void			setIndex(const size_t& index) { _index = index; }
 
 		class			OutOfRange : public std::exception 	
 		{
