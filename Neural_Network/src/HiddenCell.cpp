@@ -79,3 +79,11 @@ void	HiddenCell::computeValue(const std::vector<HiddenCell>& cells, float (*acti
 }
 
 const char	*HiddenCell::OutOfRange::what(void) const throw() { return "Index out of range\n"; }
+
+void	HiddenCell::setWeight(const size_t& index, const float& weight)
+{
+	if (index < getNbrWeights())
+		_weights[index] = weight;
+	else
+		throw OutOfRange();
+}

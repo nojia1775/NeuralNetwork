@@ -34,6 +34,7 @@ class	HiddenCell
 		float			getWeight(const size_t& index) const;
 		size_t			getIndex(void) const { return _index; }
 		void			setIndex(const size_t& index) { _index = index; }
+		void			setWeight(const size_t& index, const float& weight);
 
 		class			OutOfRange : public std::exception 	
 		{

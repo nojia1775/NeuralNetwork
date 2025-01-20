@@ -120,3 +120,28 @@ std::vector<float>	NN::getOutputs(void) const
 		outputs.push_back(value.getValue());
 	return outputs;
 }
+
+void	NN::backPropagation(float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets)
+{
+	std::vector<float> losses;
+	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
+		losses.push_back(pow(_outputs[i].getValue() - targets[i], 2) / 2);
+	std::vector<float> dErrorsOutputs;
+	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
+		dErrorsOutputs.push_back(_outputs[i].getValue() - targets[i]);
+	std::vector<float> dErrorsBeforeActivation;
+	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
+		dErrorsBeforeActivation.push_back(dErrorsOutputs[i] * derivatedActivO(_outputs[i].getValue()));
+	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
+	{
+		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
+			_hiddenCells[getNbrHiddenLayers() - 1][j].setWeight(i, -_learningRate * _hiddenCells[getNbrHiddenLayers() - 1][j].getValue() * dErrorsBeforeActivation[j]);
+	}
+	if (getNbrHiddenLayers() > 1)
+	{
+		for (int i = getNbrHiddenLayers() - 2 ; i >= 0 ; i--)
+		{
+			
+		}
+	}
+}

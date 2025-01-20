@@ -30,6 +30,7 @@ class	NN
 		void					initNN(void);
 		void					feedForward(float (*activHL)(float), float (*activO)(float));
 		void					initInputs(const std::vector<float>& inputs);
+		void					backPropagation(float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets);
 
 		size_t					getNbrInputs(void) const { return _inputs.size(); }
 		size_t					getNbrHiddenLayers(void) const { return _hiddenCells.size(); }
