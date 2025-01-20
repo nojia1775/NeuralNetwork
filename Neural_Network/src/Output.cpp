@@ -22,6 +22,7 @@ void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*ac
 	{
 		for (auto cell : hiddenCells)
 			activate += cell.getValue() * cell.getWeight(_index);
+		std::cout << "activate et output -> " << activate << " " << _bias << "\n";
 		_value = activation(activate + _bias);
 	}
 	catch (const std::exception& e)

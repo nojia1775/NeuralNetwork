@@ -54,6 +54,7 @@ void	HiddenCell::computeValue(const std::vector<Input>& inputs, float (*activati
 	{
 		for (auto input : inputs)
 			activate += input.getValue() * input.getWeight(_index);
+		std::cout << "activate et bias hidden layer -> " << activate << " " << _bias << "\n";
 		_value = activation(activate + _bias);
 	}
 	catch (const std::exception& e)

@@ -2,6 +2,7 @@
 
 NN::NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbrHiddenCells, const size_t& nbrOutputs)
 {
+	_learningRate = 0.1;
 	for (size_t i = 0 ; i < nbrInputs ; i++)
 		_inputs.push_back(Input(nbrHiddenCells));
 	std::vector<HiddenCell> cells;
@@ -31,6 +32,7 @@ NN::NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbr
 
 NN::NN(const NN& other)
 {
+	_learningRate = other.getLearningRate();
 	_inputs = other._inputs;
 	_hiddenCells = other._hiddenCells;
 	_outputs = other._outputs;
@@ -40,6 +42,7 @@ NN&	NN::operator=(const NN& other)
 {
 	if (this != &other)
 	{
+		_learningRate = other.getLearningRate();
 		_inputs = other._inputs;
 		_hiddenCells = other._hiddenCells;
 		_outputs = other._outputs;
@@ -60,13 +63,12 @@ void	NN::displayValues(void) const
 			std::cout << "[" << j << "] : " << _hiddenCells[i][j].getValue() << "\n";
 		std::cout << "\n";
 	}
-	std::cout << "\n";
 	std::cout << "Outputs : \n";
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
 		std::cout << "[" << i << "] : " << _outputs[i].getValue() << "\n";
 }
 
-void	NN::initRandomValues(void)
+void	NN::initNN(void)
 {
 	for (size_t i = 0 ; i < getNbrInputs() ; i++)
 		_inputs[i].randomWeights();
@@ -79,7 +81,7 @@ void	NN::initRandomValues(void)
 		_outputs[i].randomBias();
 }
 
-void	NN::frontPropagation(float (*activHL)(float), float (*activO)(float))
+void	NN::feedForward(float (*activHL)(float), float (*activO)(float))
 {
 	for (size_t i = 0 ; i < getNbrHiddenLayers() ; i++)
 	{
@@ -107,6 +109,14 @@ void	NN::initInputs(const std::vector<float>& inputs)
 		for (size_t i = 0 ; i < getNbrInputs() ; i++)
 			_inputs[i].initValue(inputs[i]);
 	}
-	throw Input::DifferentNumberOfWeights();
-	return;
+	else
+		throw Input::DifferentNumberOfWeights();
+}
+
+std::vector<float>	NN::getOutputs(void) const
+{
+	std::vector<float> outputs;
+	for (auto value : _outputs)
+		outputs.push_back(value.getValue());
+	return outputs;
 }
