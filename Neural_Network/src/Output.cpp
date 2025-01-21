@@ -22,7 +22,6 @@ void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*ac
 	{
 		for (auto cell : hiddenCells)
 			activate += cell.getValue() * cell.getWeight(_index);
-		std::cout << "activate et output -> " << activate << " " << _bias << "\n";
 		_value = activation(activate + _bias);
 	}
 	catch (const std::exception& e)
@@ -49,5 +48,5 @@ void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(
 void	Output::randomBias(void)
 {
 	std::srand(std::time(NULL));
-	_bias = std::rand() / RAND_MAX * 2 - 1;
+	_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 }

@@ -1,6 +1,6 @@
 #ifndef HIDDENCELL_HPP
 
-# define HIDDDENCELL_HPP
+# define HIDDENCELL_HPP
 
 # include <iostream>
 # include <cstdlib>
@@ -35,6 +35,7 @@ class	HiddenCell
 		size_t			getIndex(void) const { return _index; }
 		void			setIndex(const size_t& index) { _index = index; }
 		void			setWeight(const size_t& index, const float& weight);
+		void			setBias(const float& bias) { _bias = bias; }
 
 		class			OutOfRange : public std::exception 	
 		{

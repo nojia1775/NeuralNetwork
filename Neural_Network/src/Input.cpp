@@ -45,7 +45,7 @@ void	Input::randomWeights(void)
 {
 	std::srand(std::time(NULL));
 	for (size_t i = 0 ; i < getNbrWeights() ; i++)
-		_weights[i] = static_cast<float>(std::rand()) / RAND_MAX * 2 - 1;
+		_weights[i] = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 }
 
 void	Input::initWeights(const std::vector<float>& weights)

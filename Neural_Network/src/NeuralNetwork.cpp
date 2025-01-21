@@ -73,10 +73,8 @@ void	NN::initNN(void)
 	for (size_t i = 0 ; i < getNbrInputs() ; i++)
 		_inputs[i].randomWeights();
 	for (size_t i = 0 ; i < getNbrHiddenLayers() ; i++)
-	{
 		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
 			_hiddenCells[i][j].randomWeights();
-	}
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
 		_outputs[i].randomBias();
 }
@@ -123,25 +121,48 @@ std::vector<float>	NN::getOutputs(void) const
 
 void	NN::backPropagation(float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets)
 {
+	(void)derivatedActivHL;
 	std::vector<float> losses;
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
 		losses.push_back(pow(_outputs[i].getValue() - targets[i], 2) / 2);
-	std::vector<float> dErrorsOutputs;
+
+	std::vector<float> dErrorsOutputs(getNbrOutputs());
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
-		dErrorsOutputs.push_back(_outputs[i].getValue() - targets[i]);
-	std::vector<float> dErrorsBeforeActivation;
+		dErrorsOutputs[i] = _outputs[i].getValue() - targets[i];
+
+	std::vector<float> dErrorsBeforeActivation(getNbrOutputs());
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
-		dErrorsBeforeActivation.push_back(dErrorsOutputs[i] * derivatedActivO(_outputs[i].getValue()));
+		dErrorsBeforeActivation[i] = dErrorsOutputs[i] * derivatedActivO(_outputs[i].getValue());
+
+	std::vector<std::vector<float>> dErrorsWeightsLastLayer(getNbrHiddenCells());
+	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
+	{
+		std::vector<float> dErrorsWeights(getNbrHiddenCells(), 0);
+		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
+		{
+			dErrorsWeights[j] = dErrorsBeforeActivation[i] * _hiddenCells[getNbrHiddenLayers() - 1][j].getValue();
+		}
+		dErrorsWeightsLastLayer[i] = dErrorsWeights;
+	}
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
 	{
 		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
-			_hiddenCells[getNbrHiddenLayers() - 1][j].setWeight(i, -_learningRate * _hiddenCells[getNbrHiddenLayers() - 1][j].getValue() * dErrorsBeforeActivation[j]);
-	}
-	if (getNbrHiddenLayers() > 1)
-	{
-		for (int i = getNbrHiddenLayers() - 2 ; i >= 0 ; i--)
 		{
-			
+			float currentWeight = _hiddenCells[getNbrHiddenLayers() - 1][j].getWeight(_outputs[i].getIndex());
+			_hiddenCells[getNbrHiddenLayers() - 1][j].setWeight(_outputs[i].getIndex(), currentWeight - _learningRate * dErrorsWeightsLastLayer[i][j]);
+			float currentBias = _hiddenCells[getNbrHiddenLayers() - 1][j].getBias();
+			_hiddenCells[getNbrHiddenLayers() - 1][j].setBias(currentBias - _learningRate * dErrorsWeightsLastLayer[i][j]);
+		}
+	}
+	for (int layer = getNbrHiddenLayers() - 2 ; layer >= 0 ; layer++)
+	{
+		std::vector<float> dErrorZDeepLayer(getNbrHiddenCells());
+		for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
+		{
+			for (size_t j = 0 ; j , getNbrHiddenCells() ; j++)
+			{
+				
+			}
 		}
 	}
 }

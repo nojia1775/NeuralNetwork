@@ -36,8 +36,8 @@ void	HiddenCell::randomWeights(void)
 {
 	std::srand(std::time(NULL));
 	for (size_t i = 0 ; i < getNbrWeights() ; i++)
-		_weights[i] = std::rand() / RAND_MAX * 2 - 1;
-	_bias = std::rand() / RAND_MAX * 2 - 1;
+		_weights[i] = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
+	_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 }
 float	HiddenCell::getWeight(const size_t& index) const
 {
@@ -54,7 +54,6 @@ void	HiddenCell::computeValue(const std::vector<Input>& inputs, float (*activati
 	{
 		for (auto input : inputs)
 			activate += input.getValue() * input.getWeight(_index);
-		std::cout << "activate et bias hidden layer -> " << activate << " " << _bias << "\n";
 		_value = activation(activate + _bias);
 	}
 	catch (const std::exception& e)
