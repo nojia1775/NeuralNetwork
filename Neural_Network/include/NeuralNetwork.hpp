@@ -21,6 +21,10 @@ class	NN
 		std::vector<Output>			_outputs;
 		float					_learningRate;
 
+		std::vector<float>			updateLastLayerWeights(float (*derivatedAtivO)(float), const std::vector<float>& targets);
+		std::vector<float>			updateHiddenLayersWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsALastLayer);
+		void					updateInputsWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsAFirstLayer);
+
 	public:
 							NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbrHiddenCells, const size_t& nbrOutputs);
 							NN(const NN& other);

@@ -18,6 +18,9 @@ int	main(void)
 		nn.feedForward(ReLU, sigmoid);
 		nn.displayValues();
 		nn.backPropagation(derivatedReLU, derivatedSigmoid, {1, 1, 1});
+		nn.feedForward(ReLU, sigmoid);
+		std::cout << "\n";
+		nn.displayValues();
 	}
 	catch (const std::exception& e)
 	{

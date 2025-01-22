@@ -62,3 +62,11 @@ void	Input::initWeights(const std::vector<float>& weights)
 const char	*Input::OutOfRange::what(void) const throw() { return "Index out of range\n"; }
 
 const char	*Input::DifferentNumberOfWeights::what(void) const throw() { return "The array has a different size\n"; }
+
+void	Input::setWeight(const size_t& index, const float& weight)
+{
+	if (index < getNbrWeights())
+		_weights[index] = weight;
+	else
+		throw OutOfRange();
+}

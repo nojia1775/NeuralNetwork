@@ -18,6 +18,7 @@ class	HiddenCell
 		std::vector<float>	_weights;
 		float			_bias;
 		size_t			_index;
+		float			_z;
 
 	public:
 					HiddenCell(const size_t& nbrWeights, const size_t& index);
@@ -33,6 +34,7 @@ class	HiddenCell
 		size_t			getNbrWeights(void) const { return _weights.size(); }
 		float			getWeight(const size_t& index) const;
 		size_t			getIndex(void) const { return _index; }
+		float			getZ(void) const { return _z; }
 		void			setIndex(const size_t& index) { _index = index; }
 		void			setWeight(const size_t& index, const float& weight);
 		void			setBias(const float& bias) { _bias = bias; }

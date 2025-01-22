@@ -28,7 +28,8 @@ class	Input
 		size_t			getNbrWeights(void) const { return _weights.size(); };
 		float			getValue(void) const { return _value; };
 		float			getWeight(const size_t& index) const;
-
+		void			setWeight(const size_t& index, const float& weight);
+		
 		class			OutOfRange : public std::exception 	
 		{
 			const char	*what(void) const throw();

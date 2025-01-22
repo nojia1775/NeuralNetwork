@@ -1,8 +1,8 @@
 #include "../include/Output.hpp"
 
-Output::Output(const size_t& index) : _value(0), _bias(0), _index(index) {}
+Output::Output(const size_t& index) : _value(0), _bias(0), _index(index), _z(0) {}
 
-Output::Output(const Output& other) : _value(other.getValue()), _bias(other.getBias()), _index(other.getIndex()) {}
+Output::Output(const Output& other) : _value(other.getValue()), _bias(other.getBias()), _index(other.getIndex()), _z(other.getZ()) {}
 
 Output&	Output::operator=(const Output& other)
 {
@@ -11,6 +11,7 @@ Output&	Output::operator=(const Output& other)
 		_value = other.getValue();
 		_bias = other.getBias();
 		_index = other.getIndex();
+		_z = other.getZ();
 	}
 	return *this;
 }
@@ -22,7 +23,8 @@ void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*ac
 	{
 		for (auto cell : hiddenCells)
 			activate += cell.getValue() * cell.getWeight(_index);
-		_value = activation(activate + _bias);
+		_z = activate + _bias;
+		_value = activation(_z);
 	}
 	catch (const std::exception& e)
 	{
@@ -37,7 +39,8 @@ void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(
 	{
 		for (auto input : inputs)
 			activate += input.getValue() * input.getWeight(_index);
-		_value = activation(activate + _bias);
+		_z = activate + _bias;
+		_value = activation(_z);
 	}
 	catch (const std::exception& e)
 	{

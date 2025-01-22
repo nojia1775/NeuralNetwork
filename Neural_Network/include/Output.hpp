@@ -18,6 +18,7 @@ class	Output
 		float		_value;
 		float		_bias;
 		size_t		_index;
+		float		_z;
 
 	public:
 				Output(const size_t& index);
@@ -31,7 +32,9 @@ class	Output
 		float		getValue(void) const { return _value; }
 		float		getBias(void) const { return _bias; }
 		float		getIndex(void) const { return _index; }
+		float		getZ(void) const { return _z; }
 		void		setIndex(const size_t& index) { _index = index; }
+		void		setBias(const float& bias) { _bias = bias; }
 };
 
 #endif
