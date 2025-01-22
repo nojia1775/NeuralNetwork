@@ -234,3 +234,23 @@ void	NN::backPropagation(float (*derivatedActivHL)(float), float (*derivatedActi
 	std::vector<float> dErrorsALastLayer = updateLastLayerWeights(derivatedActivO, targets);
 	std::vector<float> dErrorsAFirstLayer = updateHiddenLayersWeights(derivatedActivHL, dErrorsALastLayer);
 }
+
+void	NN::train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*func1)(float), float (*func2)(float), float (*derivFunc1)(float), float (*derivFunc2)(float))
+{
+	for (size_t i = 0 ; i < epochs ; i++)
+	{
+		for (size_t j = 0 ; j < inputs.size() ; i++)
+		{
+			initInputs(inputs[j]);
+			feedForward(func1, func2);
+			backPropagation(derivFunc1, derivFunc2, expectedOutputs[i]);
+		}
+	}
+}
+
+std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(float), float (*activO)(float))
+{
+	initInputs(inputs);
+	feedForward(activHL, activO);
+	return getOutputs();
+}

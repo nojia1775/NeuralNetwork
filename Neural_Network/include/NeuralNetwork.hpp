@@ -35,6 +35,8 @@ class	NN
 		void					feedForward(float (*activHL)(float), float (*activO)(float));
 		void					initInputs(const std::vector<float>& inputs);
 		void					backPropagation(float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets);
+		void					train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*func1)(float), float (*func2)(float), float (*derivFunc1)(float), float (*derivFunc2)(float));
+		std::vector<float>			use(const std::vector<float>& inputs, float (*activHL)(float), float (*activO)(float));
 
 		size_t					getNbrInputs(void) const { return _inputs.size(); }
 		size_t					getNbrHiddenLayers(void) const { return _hiddenCells.size(); }
