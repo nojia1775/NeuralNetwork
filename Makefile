@@ -1,37 +1,31 @@
 CXX = c++
+CXXFLAGS = -Wall -Wextra -Werror -g
 
-CXXFLAGS = -Wall -Wextra -Werror
+SRCS =	src/Input.cpp \
+	src/HiddenCell.cpp \
+	src/Output.cpp \
+	src/NeuralNetwork.cpp
 
-OBJS_DIR = obj
+OBJS_DIR = obj/
+OBJS = $(SRCS:src/%.cpp=$(OBJS_DIR)%.o)
 
-SRCS =	main.cpp
+NAME = neuralnetwork.a
 
-OBJS = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
-
-NAME = prog
+all: $(NAME)
 
 $(NAME): $(OBJS)
-	@make -C Neural_Network
-	$(CXX) $(CXXFLAGS) $^ -o $@ Neural_Network/neuralnetwork.a -g -lm
-	
-$(OBJS_DIR)/%.o: %.cpp
+	ar -rsc $(NAME) $(OBJS)
+
+$(OBJS_DIR)%.o: src/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
-
-all: $(NAME)
-	@make -C Neural_Network
-
 clean:
-	@make clean -C Neural_Network
-	rm -rf $(OBJS_DIR)
+	rm -fr $(OBJS_DIR)
 
 fclean: clean
 	rm -rf $(NAME)
-	@make fclean -C Neural_Network
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all re clean fclean
