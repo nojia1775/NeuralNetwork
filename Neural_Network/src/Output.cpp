@@ -50,6 +50,5 @@ void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(
 
 void	Output::randomBias(void)
 {
-	std::srand(std::time(NULL));
 	_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 }

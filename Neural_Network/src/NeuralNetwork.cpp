@@ -119,11 +119,11 @@ std::vector<float>	NN::getOutputs(void) const
 	return outputs;
 }
 
-std::vector<float>	NN::updateLastLayerWeights(float (*derivatedActivO)(float), const std::vector<float>& targets)
+std::vector<float>	NN::updateLastLayerWeights(float (*derivatedLoss)(float, float), float (*derivatedActivO)(float), const std::vector<float>& targets)
 {
 	std::vector<float> dErrorsOutputs(getNbrOutputs());
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
-		dErrorsOutputs[i] = _outputs[i].getValue() - targets[i];
+		dErrorsOutputs[i] = derivatedLoss(_outputs[i].getValue(), targets[i]);
 
 	std::vector<float> dErrorsZOutputs(getNbrOutputs());
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
@@ -137,16 +137,21 @@ std::vector<float>	NN::updateLastLayerWeights(float (*derivatedActivO)(float), c
 			dErrorsWeights[j] = dErrorsZOutputs[i] * _hiddenCells[getNbrHiddenLayers() - 1][j].getValue();
 		dErrorsWeightsLastLayer[i] = dErrorsWeights;
 	}
+
+	std::vector<std::vector<float>> newWeights(getNbrOutputs());
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
 	{
+		std::vector<float> weights(getNbrHiddenCells());
 		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
 		{
 			float currentWeight = _hiddenCells[getNbrHiddenLayers() - 1][j].getWeight(_outputs[i].getIndex());
-			_hiddenCells[getNbrHiddenLayers() - 1][j].setWeight(_outputs[i].getIndex(), currentWeight - _learningRate * dErrorsWeightsLastLayer[i][j]);
+			weights[j] = currentWeight - _learningRate * dErrorsWeightsLastLayer[i][j];
 		}
+		newWeights[i] = weights;
 		float currentBias = _outputs[i].getBias();
 		_outputs[i].setBias(currentBias - _learningRate * dErrorsZOutputs[i]);
 	}
+
 	std::vector<float> dErrorsALastLayer(getNbrHiddenCells());
 	for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
 	{
@@ -154,6 +159,11 @@ std::vector<float>	NN::updateLastLayerWeights(float (*derivatedActivO)(float), c
 		for (size_t j = 0 ; j < getNbrOutputs() ; j++)
 			sum += dErrorsZOutputs[j] * _hiddenCells[getNbrHiddenLayers() - 1][i].getWeight(_outputs[j].getIndex());
 		dErrorsALastLayer[i] = sum;
+	}
+	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
+	{
+		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
+			_hiddenCells[getNbrHiddenLayers() - 1][j].setWeight(_outputs[i].getIndex(), newWeights[i][j]);
 	}
 	return dErrorsALastLayer;
 }
@@ -167,6 +177,7 @@ std::vector<float>	NN::updateHiddenLayersWeights(float (*derivatedHL)(float), co
 		for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
 			dErrorsZLayer[i] = dErrors[i] * derivatedHL(_hiddenCells[layer][i].getZ());
 
+
 		std::vector<std::vector<float>> dErrorsWeights(getNbrHiddenCells());
 		for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
 		{
@@ -176,13 +187,16 @@ std::vector<float>	NN::updateHiddenLayersWeights(float (*derivatedHL)(float), co
 			dErrorsWeights[i] = dWeights;
 		}
 
+		std::vector<std::vector<float>> newWeights(getNbrHiddenCells());
 		for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
 		{
+			std::vector<float> weights(getNbrHiddenCells());
 			for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
 			{
 				float currentWeight = _hiddenCells[layer - 1][j].getWeight(_hiddenCells[layer][i].getIndex());
-				_hiddenCells[layer - 1][j].setWeight(_hiddenCells[layer][i].getIndex(), currentWeight - _learningRate * dErrorsWeights[i][j]);
+				weights[j] = currentWeight - _learningRate * dErrorsWeights[i][j];
 			}
+			newWeights[i] = weights;
 			float currentBias = _hiddenCells[layer][i].getBias();
 			_hiddenCells[layer][i].setBias(currentBias - _learningRate * dErrorsZLayer[i]);
 		}
@@ -193,6 +207,12 @@ std::vector<float>	NN::updateHiddenLayersWeights(float (*derivatedHL)(float), co
 			for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
 				sum += dErrorsZLayer[i] * _hiddenCells[layer - 1][i].getWeight(_hiddenCells[layer][j].getIndex());
 			dErrors[i] = sum;
+			std::cout << "dE/da" << i << " = " << dErrors[i] << "\n";
+		}
+		for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
+		{
+			for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
+				_hiddenCells[layer - 1][j].setWeight(_hiddenCells[layer][i].getIndex(), newWeights[i][j]);
 		}
 	}
 	return dErrors;
@@ -209,7 +229,7 @@ void	NN::updateInputsWeights(float (*derivatedHL)(float), const std::vector<floa
 	{
 		std::vector<float> dErrorsWeights(getNbrInputs());
 		for (size_t j = 0 ; j < getNbrInputs() ; j++)
-			dErrorsWeights[i] = dErrorsZ[i] * _inputs[j].getValue();
+			dErrorsWeights[j] = dErrorsZ[i] * _inputs[j].getValue();
 		dErrorsWeightsInputs[i] = dErrorsWeights;
 	}
 
@@ -225,27 +245,32 @@ void	NN::updateInputsWeights(float (*derivatedHL)(float), const std::vector<floa
 	}
 }
 
-void	NN::backPropagation(float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets)
+float	NN::backPropagation(float (*loss)(float, float), float (*derivatedLoss)(float, float), float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets)
 {
-	std::vector<float> losses;
+	float accuracy = 0;
 	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
-		losses.push_back(pow(_outputs[i].getValue() - targets[i], 2) / 2);
+		accuracy += loss(_outputs[i].getValue(), targets[i]);
+	accuracy /= getNbrOutputs();
 
-	std::vector<float> dErrorsALastLayer = updateLastLayerWeights(derivatedActivO, targets);
+	std::vector<float> dErrorsALastLayer = updateLastLayerWeights(derivatedLoss, derivatedActivO, targets);
 	std::vector<float> dErrorsAFirstLayer = updateHiddenLayersWeights(derivatedActivHL, dErrorsALastLayer);
+	updateInputsWeights(derivatedActivHL, dErrorsAFirstLayer);
+	return accuracy;
 }
 
-void	NN::train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*func1)(float), float (*func2)(float), float (*derivFunc1)(float), float (*derivFunc2)(float))
+void	NN::train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*loss)(float, float), float (*derivatedLoss)(float, float), float (*func1)(float), float (*func2)(float), float (*derivFunc1)(float), float (*derivFunc2)(float))
 {
+	float accuracy = 0;
 	for (size_t i = 0 ; i < epochs ; i++)
 	{
-		for (size_t j = 0 ; j < inputs.size() ; i++)
+		for (size_t j = 0 ; j < inputs.size() ; j++)
 		{
 			initInputs(inputs[j]);
 			feedForward(func1, func2);
-			backPropagation(derivFunc1, derivFunc2, expectedOutputs[i]);
+			accuracy = backPropagation(loss, derivatedLoss, derivFunc1, derivFunc2, expectedOutputs[j]);
 		}
 	}
+	std::cout << "Accuracy = " << 1 - accuracy << "\n";
 }
 
 std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(float), float (*activO)(float))

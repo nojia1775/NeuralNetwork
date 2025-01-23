@@ -43,7 +43,6 @@ float	Input::getWeight(const size_t& index) const
 
 void	Input::randomWeights(void)
 {
-	std::srand(std::time(NULL));
 	for (size_t i = 0 ; i < getNbrWeights() ; i++)
 		_weights[i] = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 }

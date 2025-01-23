@@ -37,7 +37,6 @@ HiddenCell&	HiddenCell::operator=(const HiddenCell& other)
 
 void	HiddenCell::randomWeights(void)
 {
-	std::srand(std::time(NULL));
 	for (size_t i = 0 ; i < getNbrWeights() ; i++)
 		_weights[i] = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 	_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
