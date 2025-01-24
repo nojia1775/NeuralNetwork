@@ -49,6 +49,15 @@
 		"ranges": "cpp",
 		"span": "cpp",
 		"fstream": "cpp",
-		"sstream": "cpp"
+		"sstream": "cpp",
+		"any": "cpp",
+		"codecvt": "cpp",
+		"cstring": "cpp",
+		"forward_list": "cpp",
+		"map": "cpp",
+		"ratio": "cpp",
+		"iomanip": "cpp",
+		"valarray": "cpp",
+		"variant": "cpp"
 	}
 }

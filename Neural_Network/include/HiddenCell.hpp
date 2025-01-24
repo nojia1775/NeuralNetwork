@@ -33,11 +33,13 @@ class	HiddenCell
 		float			getBias(void) const { return _bias; }
 		size_t			getNbrWeights(void) const { return _weights.size(); }
 		float			getWeight(const size_t& index) const;
+		std::vector<float>	getWeights(void) const { return _weights; }
 		size_t			getIndex(void) const { return _index; }
 		float			getZ(void) const { return _z; }
 		void			setIndex(const size_t& index) { _index = index; }
 		void			setWeight(const size_t& index, const float& weight);
 		void			setBias(const float& bias) { _bias = bias; }
+
 
 		class			OutOfRange : public std::exception 	
 		{

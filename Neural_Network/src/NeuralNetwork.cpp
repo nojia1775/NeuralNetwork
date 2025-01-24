@@ -2,6 +2,8 @@
 
 NN::NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbrHiddenCells, const size_t& nbrOutputs)
 {
+	std::srand(std::time(NULL));
+	_id = std::rand();
 	_learningRate = 0.1;
 	for (size_t i = 0 ; i < nbrInputs ; i++)
 		_inputs.push_back(Input(nbrHiddenCells));
@@ -32,6 +34,8 @@ NN::NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbr
 
 NN::NN(const NN& other)
 {
+	std::srand(std::time(NULL));
+	_id = std::rand();
 	_learningRate = other.getLearningRate();
 	_inputs = other._inputs;
 	_hiddenCells = other._hiddenCells;
@@ -40,8 +44,10 @@ NN::NN(const NN& other)
 
 NN&	NN::operator=(const NN& other)
 {
+	std::srand(std::time(NULL));
 	if (this != &other)
 	{
+		_id = std::rand();
 		_learningRate = other.getLearningRate();
 		_inputs = other._inputs;
 		_hiddenCells = other._hiddenCells;
@@ -207,7 +213,6 @@ std::vector<float>	NN::updateHiddenLayersWeights(float (*derivatedHL)(float), co
 			for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
 				sum += dErrorsZLayer[i] * _hiddenCells[layer - 1][i].getWeight(_hiddenCells[layer][j].getIndex());
 			dErrors[i] = sum;
-			std::cout << "dE/da" << i << " = " << dErrors[i] << "\n";
 		}
 		for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
 		{
@@ -255,6 +260,7 @@ float	NN::backPropagation(float (*loss)(float, float), float (*derivatedLoss)(fl
 	std::vector<float> dErrorsALastLayer = updateLastLayerWeights(derivatedLoss, derivatedActivO, targets);
 	std::vector<float> dErrorsAFirstLayer = updateHiddenLayersWeights(derivatedActivHL, dErrorsALastLayer);
 	updateInputsWeights(derivatedActivHL, dErrorsAFirstLayer);
+	_accuracy.push_back(accuracy);
 	return accuracy;
 }
 
@@ -278,4 +284,109 @@ std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(fl
 	initInputs(inputs);
 	feedForward(activHL, activO);
 	return getOutputs();
+}
+
+void	NN::getJSON(void) const
+{
+	nlohmann::json jsonData;
+	jsonData["inputs"] = getNbrInputs();
+	jsonData["hidden_layers"] = getNbrHiddenCells();
+	jsonData["hidden_neurals"] = getNbrHiddenCells();
+	jsonData["outputs"] = getNbrOutputs();
+	jsonData["layers"] = nlohmann::json::array();
+
+	nlohmann::json inputsData;
+	inputsData["type"] = "inputs";
+	inputsData["weights"] = nlohmann::json::array();
+	for (size_t i = 0 ; i < getNbrInputs() ; i++)
+		inputsData["weights"].push_back(_inputs[i].getWeights());
+	jsonData["layers"].push_back(inputsData);
+
+	nlohmann::json hiddenData;
+	for (size_t i = 0 ; i < getNbrHiddenLayers() ; i++)
+	{
+		hiddenData["bias"] = {getHiddenLayersBias(i)};
+		hiddenData["type"] = "hidden_layer_" + std::to_string(i);
+		hiddenData["weights"] = nlohmann::json::array();
+		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
+			hiddenData["weights"].push_back(_hiddenCells[i][j].getWeights());
+		jsonData["layers"].push_back(hiddenData);
+	}
+
+	nlohmann::json outputsData;
+	outputsData["type"] = "outputs";
+	outputsData["bias"] = {getOutputsBias()};
+	jsonData["layers"].push_back(outputsData);
+	//jsonData["loss"] = {getAccuracy()};
+	std::ofstream file("nn" + std::to_string(_id) + ".json");
+	if (file.is_open())
+	{
+		file << jsonData.dump(4);
+		file.close();
+	}
+	else
+		std::cout << "Error\n";
+}
+
+void	NN::getJSON(const std::string& name) const
+{
+	nlohmann::json jsonData;
+	jsonData["inputs"] = getNbrInputs();
+	jsonData["hidden_layers"] = getNbrHiddenCells();
+	jsonData["hidden_neurals"] = getNbrHiddenCells();
+	jsonData["outputs"] = getNbrOutputs();
+	jsonData["layers"] = nlohmann::json::array();
+
+	nlohmann::json inputsData;
+	inputsData["type"] = "inputs";
+	inputsData["weights"] = nlohmann::json::array();
+	for (size_t i = 0 ; i < getNbrInputs() ; i++)
+		inputsData["weights"].push_back(_inputs[i].getWeights());
+	jsonData["layers"].push_back(inputsData);
+
+	nlohmann::json hiddenData;
+	for (size_t i = 0 ; i < getNbrHiddenLayers() ; i++)
+	{
+		hiddenData["bias"] = {getHiddenLayersBias(i)};
+		hiddenData["type"] = "hidden_layer_" + std::to_string(i);
+		hiddenData["weights"] = nlohmann::json::array();
+		for (size_t j = 0 ; j < getNbrHiddenCells() ; j++)
+			hiddenData["weights"].push_back(_hiddenCells[i][j].getWeights());
+		jsonData["layers"].push_back(hiddenData);
+	}
+
+	nlohmann::json outputsData;
+	outputsData["type"] = "outputs";
+	outputsData["bias"] = {getOutputsBias()};
+	jsonData["layers"].push_back(outputsData);
+	//jsonData["loss"] = {getAccuracy()};
+	std::ofstream file(name);
+	if (file.is_open())
+	{
+		file << jsonData.dump(4);
+		file.close();
+	}
+	else
+		std::cout << "Error\n";
+}
+
+std::vector<float>	NN::getHiddenLayersBias(const size_t& layer) const
+{
+	if (layer > getNbrHiddenLayers() - 1)
+	{
+		throw Input::OutOfRange();
+		return {0};
+	}
+	std::vector<float> bias(getNbrHiddenCells());
+	for (size_t i = 0 ; i < getNbrHiddenCells() ; i++)
+		bias[i] = _hiddenCells[layer][i].getBias();
+	return bias;
+}
+
+std::vector<float>	NN::getOutputsBias(void) const
+{
+	std::vector<float> bias(getNbrOutputs());
+	for (size_t i = 0 ; i < getNbrOutputs() ; i++)
+		bias[i] = _outputs[i].getBias();
+	return bias;
 }

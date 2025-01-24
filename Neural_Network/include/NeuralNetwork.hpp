@@ -7,6 +7,8 @@
 # include <ctime>
 # include <cmath>
 # include <vector>
+# include <fstream>
+# include "Json.hpp"
 # include "Input.hpp"
 # include "HiddenCell.hpp"
 # include "Output.hpp"
@@ -20,6 +22,8 @@ class	NN
 		std::vector<std::vector<HiddenCell>>	_hiddenCells;
 		std::vector<Output>			_outputs;
 		float					_learningRate;
+		size_t					_id;
+		std::vector<float>			_accuracy;
 
 		std::vector<float>			updateLastLayerWeights(float (*derivatedLoss)(float, float), float (*derivatedAtivO)(float), const std::vector<float>& targets);
 		std::vector<float>			updateHiddenLayersWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsALastLayer);
@@ -44,6 +48,12 @@ class	NN
 		size_t					getNbrOutputs(void) const { return _outputs.size(); }
 		std::vector<float>			getOutputs(void) const;
 		float					getLearningRate(void) const { return _learningRate; }
+		void					getJSON(void) const;
+		void					getJSON(const std::string& name) const;
+		size_t					getId(void) const { return _id; }
+		std::vector<float>			getHiddenLayersBias(const size_t& layer) const;
+		std::vector<float>			getOutputsBias(void) const;
+		std::vector<float>			getAccuracy(void) const { return _accuracy; }
 		void					setLearningRate(float learningRate) { _learningRate = learningRate; }
 };
 
