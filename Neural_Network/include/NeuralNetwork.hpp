@@ -23,7 +23,7 @@ class	NN
 		std::vector<Output>			_outputs;
 		float					_learningRate;
 		size_t					_id;
-		std::vector<float>			_accuracy;
+		std::vector<float>			_loss;
 
 		std::vector<float>			updateLastLayerWeights(float (*derivatedLoss)(float, float), float (*derivatedAtivO)(float), const std::vector<float>& targets);
 		std::vector<float>			updateHiddenLayersWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsALastLayer);
@@ -53,7 +53,7 @@ class	NN
 		size_t					getId(void) const { return _id; }
 		std::vector<float>			getHiddenLayersBias(const size_t& layer) const;
 		std::vector<float>			getOutputsBias(void) const;
-		std::vector<float>			getAccuracy(void) const { return _accuracy; }
+		std::vector<float>			getLoss(void) const { return _loss; }
 		void					setLearningRate(float learningRate) { _learningRate = learningRate; }
 };
 

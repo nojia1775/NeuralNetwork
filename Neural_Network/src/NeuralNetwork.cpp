@@ -2,7 +2,7 @@
 
 NN::NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbrHiddenCells, const size_t& nbrOutputs)
 {
-	std::srand(std::time(NULL));
+	// std::srand(std::time(NULL));
 	_id = std::rand();
 	_learningRate = 0.1;
 	for (size_t i = 0 ; i < nbrInputs ; i++)
@@ -34,7 +34,7 @@ NN::NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbr
 
 NN::NN(const NN& other)
 {
-	std::srand(std::time(NULL));
+	// std::srand(std::time(NULL));
 	_id = std::rand();
 	_learningRate = other.getLearningRate();
 	_inputs = other._inputs;
@@ -44,7 +44,7 @@ NN::NN(const NN& other)
 
 NN&	NN::operator=(const NN& other)
 {
-	std::srand(std::time(NULL));
+	// std::srand(std::time(NULL));
 	if (this != &other)
 	{
 		_id = std::rand();
@@ -260,7 +260,7 @@ float	NN::backPropagation(float (*loss)(float, float), float (*derivatedLoss)(fl
 	std::vector<float> dErrorsALastLayer = updateLastLayerWeights(derivatedLoss, derivatedActivO, targets);
 	std::vector<float> dErrorsAFirstLayer = updateHiddenLayersWeights(derivatedActivHL, dErrorsALastLayer);
 	updateInputsWeights(derivatedActivHL, dErrorsAFirstLayer);
-	_accuracy.push_back(accuracy);
+	_loss.push_back(accuracy);
 	return accuracy;
 }
 
@@ -288,9 +288,10 @@ std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(fl
 
 void	NN::getJSON(void) const
 {
+	std::string fileName("nn" + std::to_string(_id) + ".json");
 	nlohmann::json jsonData;
 	jsonData["inputs"] = getNbrInputs();
-	jsonData["hidden_layers"] = getNbrHiddenCells();
+	jsonData["hidden_layers"] = getNbrHiddenLayers();
 	jsonData["hidden_neurals"] = getNbrHiddenCells();
 	jsonData["outputs"] = getNbrOutputs();
 	jsonData["layers"] = nlohmann::json::array();
@@ -317,18 +318,19 @@ void	NN::getJSON(void) const
 	outputsData["type"] = "outputs";
 	outputsData["bias"] = {getOutputsBias()};
 	jsonData["layers"].push_back(outputsData);
-	//jsonData["loss"] = {getAccuracy()};
+	jsonData["loss"] = {getLoss()};
 	std::ofstream file("nn" + std::to_string(_id) + ".json");
 	if (file.is_open())
 	{
 		file << jsonData.dump(4);
+		std::cout << "Log saved in " << fileName << "\n";
 		file.close();
 	}
 	else
 		std::cout << "Error\n";
 }
 
-void	NN::getJSON(const std::string& name) const
+void	NN::getJSON(const std::string& fileName) const
 {
 	nlohmann::json jsonData;
 	jsonData["inputs"] = getNbrInputs();
@@ -359,11 +361,12 @@ void	NN::getJSON(const std::string& name) const
 	outputsData["type"] = "outputs";
 	outputsData["bias"] = {getOutputsBias()};
 	jsonData["layers"].push_back(outputsData);
-	//jsonData["loss"] = {getAccuracy()};
-	std::ofstream file(name);
+	jsonData["loss"] = {getLoss()};
+	std::ofstream file(fileName);
 	if (file.is_open())
 	{
 		file << jsonData.dump(4);
+		std::cout << "Log saved in " << fileName << "\n";
 		file.close();
 	}
 	else

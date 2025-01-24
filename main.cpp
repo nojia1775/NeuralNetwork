@@ -22,6 +22,7 @@ float	derivatedMSE(float yPred, float yTrue) { return yPred - yTrue; }
 
 int	main(void)
 {
+	std::srand(std::time(NULL));
 	std::vector<std::vector<float>> datas = {
 		{1.0f, 1.0f},
 		{0.0f, 1.0f},
@@ -39,8 +40,18 @@ int	main(void)
 		NN nn(2, 1, 2, 1);
 		nn.initNN();
 		nn.setLearningRate(0.1f);
-		nn.train(1000, datas, expected, BCE, derivatedBCE, ReLU, sigmoid, derivatedReLU, derivatedSigmoid);
 		std::vector<float> outputs = nn.use({0.0f, 1.0f}, ReLU, sigmoid);
+		std::cout << "avant entrainement : " << outputs[0] << "\n";
+		nn.train(10000, datas, expected, BCE, derivatedBCE, ReLU, sigmoid, derivatedReLU, derivatedSigmoid);
+		outputs = nn.use({0.0f, 1.0f}, ReLU, sigmoid);
+		std::cout << "Output = " << outputs[0] << "\n";
+		outputs = nn.use({1.0f, 0.0f}, ReLU, sigmoid);
+		std::cout << "Output = " << outputs[0] << "\n";
+		outputs = nn.use({1.0f, 1.0f}, ReLU, sigmoid);
+		std::cout << "Output = " << outputs[0] << "\n";
+		outputs = nn.use({0.0f, 0.0f}, ReLU, sigmoid);
+		std::cout << "Output = " << outputs[0] << "\n";
+		outputs = nn.use({0.0f, 1.0f}, ReLU, sigmoid);
 		std::cout << "Output = " << outputs[0] << "\n";
 		nn.getJSON();
 	}
