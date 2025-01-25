@@ -31,6 +31,7 @@ class	NN
 
 	public:
 							NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbrHiddenCells, const size_t& nbrOutputs);
+							NN(const std::string& fileName);
 							NN(const NN& other);
 		NN&					operator=(const NN& other);
 
