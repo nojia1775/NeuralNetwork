@@ -1,1 +1,1 @@
-Class C++ qui construit un réseau de neurones artificiels
+Bibliothèque C++ pour construire un réseau de neurones artificiels
