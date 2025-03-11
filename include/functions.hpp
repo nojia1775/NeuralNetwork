@@ -19,7 +19,7 @@ float	derivatedBCE(float yPred, float yTrue) { return - yTrue / (yPred + 1e-7) +
 
 float	activation(float x) { return x; }
 
-float	derivatedAction(float x) { return x / abs(x); }
+float	derivatedActivation(float x) { return x / abs(x); }
 
 float	MSE(float yPred, float yTrue) { return pow(yPred - yTrue, 2) / 2; }
 
