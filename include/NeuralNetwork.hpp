@@ -2,6 +2,8 @@
 
 # define  NEURALNETWORK_HPP
 
+# define DEBUG 0
+
 # include <iostream>
 # include <cstdlib>
 # include <ctime>

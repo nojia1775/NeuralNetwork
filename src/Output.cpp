@@ -1,4 +1,5 @@
 #include "../include/Output.hpp"
+#include "../include/NeuralNetwork.hpp"
 
 Output::Output(const size_t& index) : _value(0), _bias(0), _index(index), _z(0) {}
 
@@ -25,6 +26,13 @@ void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*ac
 			activate += cell.getValue() * cell.getWeight(_index);
 		_z = activate + _bias;
 		_value = activation(_z);
+		if (DEBUG)
+		{
+			std::cout << "activate = somme(cell * cell.weight) ->\n";
+			std::cout << "activate" << " = " << activate << "\n";
+			std::cout << "Z = activate + bias ->\n" << _z << " = " << activate << " + " << _bias << "\n";
+			std::cout << "value = function(activate) ->\nvalue = " << _value << "\n\n";
+		}
 	}
 	catch (const std::exception& e)
 	{
@@ -50,5 +58,7 @@ void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(
 
 void	Output::randomBias(void)
 {
-	_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
+	_bias = 0;
+	while (_bias == 0)
+		_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 }

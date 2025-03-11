@@ -5,9 +5,13 @@
 # include <iostream>
 # include <cmath>
 
-float	ReLU(float x) { return x < 0 ? 0 : x; }
+float	ReLU(float x) { return x <= 0 ? 0 : x; }
 
-float	derivatedReLU(float x) { return x < 0 ? 0 : 1; }
+float	derivatedReLU(float x) { return x <= 0 ? 0 : 1; }
+
+float	leakyReLU(float x) { return x <= 0 ? x * 0.01 : x; }
+
+float	derivatedLeakyReLU(float x) { return x <= 0 ? 0.01 : 1; }
 
 float	sigmoid(float x) { return 1 / (1 + exp(-x)); }
 

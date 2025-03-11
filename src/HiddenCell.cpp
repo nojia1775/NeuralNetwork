@@ -1,4 +1,5 @@
 #include "../include/HiddenCell.hpp"
+#include "../include/NeuralNetwork.hpp"
 
 HiddenCell::HiddenCell(const size_t& nbrWeights, const size_t& index)
 {
@@ -38,8 +39,14 @@ HiddenCell&	HiddenCell::operator=(const HiddenCell& other)
 void	HiddenCell::randomWeights(void)
 {
 	for (size_t i = 0 ; i < getNbrWeights() ; i++)
-		_weights[i] = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
-	_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
+	{
+		_weights[i] = 0;
+		while (_weights[i] == 0)
+			_weights[i] = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
+	}
+	_bias = 0;
+	while (_bias == 0)
+		_bias = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 2 - 1;
 }
 float	HiddenCell::getWeight(const size_t& index) const
 {
@@ -58,6 +65,13 @@ void	HiddenCell::computeValue(const std::vector<Input>& inputs, float (*activati
 			activate += input.getValue() * input.getWeight(_index);
 		_z = activate + _bias;
 		_value = activation(_z);
+		if (DEBUG)
+		{
+			std::cout << "activate = somme(input * input.weight) ->\n";
+			std::cout << "activate" << " = " << activate << "\n";
+			std::cout << "Z = activate + bias ->\n" << _z << " = " << activate << " + " << _bias << "\n";
+			std::cout << "value = function(activate) ->\nvalue = " << _value << "\n\n";
+		}
 	}
 	catch (const std::exception& e)
 	{
