@@ -26,8 +26,8 @@ class	HiddenCell
 		HiddenCell&		operator=(const HiddenCell& other);
 
 		void			randomWeights(void);
-		void			computeValue(const std::vector<Input>& inputs, float (*activation)(float));
-		void			computeValue(const std::vector<HiddenCell>& cells, float (*activation)(float));
+		void			computeValue(const std::vector<Input>& inputs, float (*activation)(const float&));
+		void			computeValue(const std::vector<HiddenCell>& cells, float (*activation)(const float&));
 
 		float			getValue(void) const { return _value; }
 		float			getBias(void) const { return _bias; }

@@ -1,6 +1,6 @@
 #include "../../include/NeuralNetwork.hpp"
 
-std::vector<float>	NN::updateLastLayerWeights(float (*derivatedLoss)(float, float), float (*derivatedActivO)(float), const std::vector<float>& targets)
+std::vector<float>	NN::updateLastLayerWeights(float (*derivatedLoss)(const float&, const float&), float (*derivatedActivO)(const float&), const std::vector<float>& targets)
 {
 	if (DEBUG)
 		std::cout << "--------------------- UPDATE LAST LAYER ---------------------\n\n";
@@ -84,7 +84,7 @@ std::vector<float>	NN::updateLastLayerWeights(float (*derivatedLoss)(float, floa
 	return dErrorsALastLayer;
 }
 
-std::vector<float>	NN::updateHiddenLayersWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsALastLayer)
+std::vector<float>	NN::updateHiddenLayersWeights(float (*derivatedHL)(const float&), const std::vector<float>& dErrorsALastLayer)
 {
 	if (DEBUG)
 		std::cout << "--------------------- UPDATE HIDDEN LAYERS ---------------------\n\n";
@@ -156,7 +156,7 @@ std::vector<float>	NN::updateHiddenLayersWeights(float (*derivatedHL)(float), co
 	return dErrors;
 }
 
-void	NN::updateInputsWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsAFirstLayer)
+void	NN::updateInputsWeights(float (*derivatedHL)(const float&), const std::vector<float>& dErrorsAFirstLayer)
 {
 	if (DEBUG)
 		std::cout << "--------------------- UPDATE FIRST LAYER ---------------------\n\n";
@@ -205,7 +205,7 @@ void	NN::updateInputsWeights(float (*derivatedHL)(float), const std::vector<floa
 	}
 }
 
-float	NN::backPropagation(float (*loss)(float, float), float (*derivatedLoss)(float, float), float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets)
+float	NN::backPropagation(float (*loss)(const float&, const float&), float (*derivatedLoss)(const float&, const float&), float (*derivatedActivHL)(const float&), float (*derivatedActivO)(const float&), const std::vector<float>& targets)
 {
 	if (DEBUG)
 		std::cout << "------------- BACK PROPAGATION -------------\n\n";

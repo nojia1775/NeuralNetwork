@@ -1,6 +1,6 @@
 #include "../../include/NeuralNetwork.hpp"
 
-void	NN::feedForward(float (*activHL)(float), float (*activO)(float))
+void	NN::feedForward(float (*activHL)(const float&), float (*activO)(const float&))
 {
 	if (DEBUG)
 	{

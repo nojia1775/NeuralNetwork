@@ -101,7 +101,7 @@ std::vector<float>	NN::getOutputs(void) const
 	return outputs;
 }
 
-void	NN::train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*loss)(float, float), float (*derivatedLoss)(float, float), float (*func1)(float), float (*func2)(float), float (*derivFunc1)(float), float (*derivFunc2)(float))
+void	NN::train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*loss)(const float&, const float&), float (*derivatedLoss)(const float&, const float&), float (*func1)(const float&), float (*func2)(const float&), float (*derivFunc1)(const float&), float (*derivFunc2)(const float&))
 {
 	float accuracy = 0;
 	for (size_t i = 0 ; i < epochs ; i++)
@@ -116,7 +116,7 @@ void	NN::train(const size_t& epochs, const std::vector<std::vector<float>>& inpu
 	std::cout << "Accuracy = " << 1 - accuracy << "\n";
 }
 
-std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(float), float (*activO)(float))
+std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(const float&), float (*activO)(const float&))
 {
 	initInputs(inputs);
 	feedForward(activHL, activO);

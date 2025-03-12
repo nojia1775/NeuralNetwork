@@ -25,9 +25,9 @@ class	NN
 		size_t					_id;
 		std::vector<float>			_loss;
 
-		std::vector<float>			updateLastLayerWeights(float (*derivatedLoss)(float, float), float (*derivatedAtivO)(float), const std::vector<float>& targets);
-		std::vector<float>			updateHiddenLayersWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsALastLayer);
-		void					updateInputsWeights(float (*derivatedHL)(float), const std::vector<float>& dErrorsAFirstLayer);
+		std::vector<float>			updateLastLayerWeights(float (*derivatedLoss)(const float&, const float&), float (*derivatedAtivO)(const float&), const std::vector<float>& targets);
+		std::vector<float>			updateHiddenLayersWeights(float (*derivatedHL)(const float&), const std::vector<float>& dErrorsALastLayer);
+		void					updateInputsWeights(float (*derivatedHL)(const float&), const std::vector<float>& dErrorsAFirstLayer);
 
 	public:
 							NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbrHiddenCells, const size_t& nbrOutputs);
@@ -37,11 +37,11 @@ class	NN
 
 		void					displayValues(void) const;
 		void					initNN(void);
-		void					feedForward(float (*activHL)(float), float (*activO)(float));
+		void					feedForward(float (*activHL)(const float&), float (*activO)(const float&));
 		void					initInputs(const std::vector<float>& inputs);
-		float					backPropagation(float (*loss)(float, float), float (*derivatedLoss)(float, float), float (*derivatedActivHL)(float), float (*derivatedActivO)(float), const std::vector<float>& targets);
-		void					train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*loss)(float, float), float (*derivatedLoss)(float, float), float (*func1)(float), float (*func2)(float), float (*derivFunc1)(float), float (*derivFunc2)(float));
-		std::vector<float>			use(const std::vector<float>& inputs, float (*activHL)(float), float (*activO)(float));
+		float					backPropagation(float (*loss)(const float&, const float&), float (*derivatedLoss)(const float&, const float&), float (*derivatedActivHL)(const float&), float (*derivatedActivO)(const float&), const std::vector<float>& targets);
+		void					train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*loss)(const float&, const float&), float (*derivatedLoss)(const float&, const float&), float (*func1)(const float&), float (*func2)(const float&), float (*derivFunc1)(const float&), float (*derivFunc2)(const float&));
+		std::vector<float>			use(const std::vector<float>& inputs, float (*activHL)(const float&), float (*activO)(const float&));
 
 		size_t					getNbrInputs(void) const { return _inputs.size(); }
 		size_t					getNbrHiddenLayers(void) const { return _hiddenCells.size(); }
