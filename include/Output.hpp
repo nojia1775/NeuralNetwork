@@ -25,8 +25,8 @@ class	Output
 				Output(const Output& other);
 		Output&		operator=(const Output& other);
 
-		void		computeValue(const std::vector<HiddenCell>& hiddenCells, float (*activation)(float));
-		void		computeValue(const std::vector<Input>& inputs, float (*activation)(float));
+		void		computeValue(const std::vector<HiddenCell>& hiddenCells, float (*activation)(const float&));
+		void		computeValue(const std::vector<Input>& inputs, float (*activation)(const float&));
 		void		randomBias(void);
 
 		float		getValue(void) const { return _value; }

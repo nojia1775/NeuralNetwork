@@ -56,7 +56,7 @@ float	HiddenCell::getWeight(const size_t& index) const
 	return -1.0;
 }
 
-void	HiddenCell::computeValue(const std::vector<Input>& inputs, float (*activation)(float))
+void	HiddenCell::computeValue(const std::vector<Input>& inputs, float (*activation)(const float&))
 {
 	float activate = 0;
 	try
@@ -79,7 +79,7 @@ void	HiddenCell::computeValue(const std::vector<Input>& inputs, float (*activati
 	}
 }
 
-void	HiddenCell::computeValue(const std::vector<HiddenCell>& cells, float (*activation)(float))
+void	HiddenCell::computeValue(const std::vector<HiddenCell>& cells, float (*activation)(const float&))
 {
 	float activate = 0;
 	try

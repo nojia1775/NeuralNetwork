@@ -1,22 +1,27 @@
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -g
+CXXFLAGS = -Wall -Wextra -Werror -g -MMD
 
 SRCS =	src/Input.cpp \
 	src/HiddenCell.cpp \
 	src/Output.cpp \
-	src/NeuralNetwork.cpp
+	src/network/NeuralNetwork.cpp \
+	src/network/Json.cpp \
+	src/network/BackPropagation.cpp \
+	src/network/FeedForward.cpp
 
 OBJS_DIR = obj/
-OBJS = $(SRCS:src/%.cpp=$(OBJS_DIR)%.o)
+OBJS = $(SRCS:%.cpp=$(OBJS_DIR)%.o)
 
 NAME = neuralnetwork.a
+
+DEPS = $(OBJS:.o=.d)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	ar -rsc $(NAME) $(OBJS)
 
-$(OBJS_DIR)%.o: src/%.cpp
+$(OBJS_DIR)%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
@@ -27,5 +32,7 @@ fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
+
+-include $(DEPS)
 
 .PHONY: all re clean fclean

@@ -17,7 +17,7 @@ Output&	Output::operator=(const Output& other)
 	return *this;
 }
 
-void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*activation)(float))
+void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*activation)(const float&))
 {
 	float activate = 0;
 	try
@@ -40,7 +40,7 @@ void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*ac
 	}
 }
 
-void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(float))
+void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(const float&))
 {
 	float activate = 0;
 	try
