@@ -40,6 +40,24 @@ void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells, float (*ac
 	}
 }
 
+void	Output::computeValue(const std::vector<HiddenCell>& hiddenCells)
+{
+	float activate = 0;
+	try
+	{
+		for (auto cell : hiddenCells)
+			activate += cell.getValue() * cell.getWeight(_index);
+		_z = activate + _bias;
+		if (DEBUG)
+		{
+			std::cout << "activate = somme(cell * cell.weight) ->\n";
+			std::cout << "activate" << " = " << activate << "\n";
+			std::cout << "Z = activate + bias ->\n" << _z << " = " << activate << " + " << _bias << "\n";
+		}
+	}
+	catch (const std::exception& e) { std::cout << e.what() << "\n"; }
+}
+
 void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(const float&))
 {
 	float activate = 0;
@@ -54,6 +72,18 @@ void	Output::computeValue(const std::vector<Input>& inputs, float (*activation)(
 	{
 		std::cout << e.what() << "\n";
 	}
+}
+
+void	Output::computeValue(const std::vector<Input>& inputs)
+{
+	float activate = 0;
+	try
+	{
+		for (auto input : inputs)
+			activate += input.getValue() * input.getWeight(_index);
+		_z = activate + _bias;
+	}
+	catch (const std::exception& e) { std::cout << e.what() << "\n"; }
 }
 
 void	Output::randomBias(void)

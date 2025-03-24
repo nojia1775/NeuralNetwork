@@ -116,7 +116,7 @@ void	NN::train(const size_t& epochs, const std::vector<std::vector<float>>& inpu
 	std::cout << "Accuracy = " << 1 - accuracy << "\n";
 }
 
-void	NN::trainMultiClass(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<std::vector<float>>>& expectedOutputs, float (*f)(const float&), float (*derivatedF)(const float&))
+void	NN::trainMultiClass(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*f)(const float&), float (*derivatedF)(const float&))
 {
 	float accuracy = 0;
 	for (size_t i = 0 ; i < epochs ; i++)
@@ -124,7 +124,7 @@ void	NN::trainMultiClass(const size_t& epochs, const std::vector<std::vector<flo
 		for (size_t j = 0 ; j < inputs.size() ; j++)
 		{
 			initInputs(inputs[j]);
-			feedForwardMultiClass(f, derivatedF);
+			feedForwardMultiClass(f);
 			accuracy = backPropagationMultiClass(f, derivatedF, expectedOutputs[j]);
 		}
 	}
@@ -134,6 +134,13 @@ std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(co
 {
 	initInputs(inputs);
 	feedForward(activHL, activO);
+	return getOutputs();
+}
+
+std::vector<float>	NN::useMultiClass(const std::vector<float>& inputs, float (*f)(const float&))
+{
+	initInputs(inputs);
+	feedForwardMultiClass(f);
 	return getOutputs();
 }
 

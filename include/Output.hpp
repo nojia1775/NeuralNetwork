@@ -27,6 +27,8 @@ class	Output
 
 		void		computeValue(const std::vector<HiddenCell>& hiddenCells, float (*activation)(const float&));
 		void		computeValue(const std::vector<Input>& inputs, float (*activation)(const float&));
+		void		computeValue(const std::vector<HiddenCell>& hiddenCells);
+		void		computeValue(const std::vector<Input>& inputs);
 		void		randomBias(void);
 
 		float		getValue(void) const { return _value; }
@@ -35,6 +37,7 @@ class	Output
 		float		getZ(void) const { return _z; }
 		void		setIndex(const size_t& index) { _index = index; }
 		void		setBias(const float& bias) { _bias = bias; }
+		void		setValue(const float& value) { _value = value; }
 };
 
 #endif

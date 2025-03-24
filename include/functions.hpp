@@ -7,6 +7,8 @@
 # include <vector>
 # include <algorithm>
 
+# define EPSILON 1e-9
+
 // fonctions d'activaiton
 
 float	ReLU(const float& x) { return x <= 0 ? 0 : x; }
