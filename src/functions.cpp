@@ -33,8 +33,7 @@ float	crossEntropy(const std::vector<float>& yPred, const std::vector<float>& yT
 {
 	float loss = 0.0f;
 	for (size_t i = 0; i < yTrue.size(); ++i)
-		if (yTrue[i] > 0)
-			loss -= std::log(yPred[i] + EPSILON);
+		loss -= std::log(yPred[i] + EPSILON);
 	return loss;
 }
 

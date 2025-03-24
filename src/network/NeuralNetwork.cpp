@@ -140,6 +140,7 @@ std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(co
 
 std::vector<float>	NN::useMultiClass(const std::vector<float>& inputs, float (*f)(const float&))
 {
+	std::cout << inputs.size() << " " << getNbrInputs() << "\n";
 	initInputs(inputs);
 	feedForwardMultiClass(f);
 	return getOutputs();
