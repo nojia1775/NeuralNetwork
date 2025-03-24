@@ -1,4 +1,4 @@
-#include "../../include/NeuralNetwork.hpp"
+#include "NeuralNetwork.hpp"
 
 void	NN::feedForward(float (*activHL)(const float&), float (*activO)(const float&))
 {

@@ -1,4 +1,4 @@
-#include "../include/functions.hpp"
+#include "functions.hpp"
 
 std::vector<float>	softMax(const std::vector<float>& input)
 {
@@ -31,7 +31,7 @@ std::vector<float>	derivatedSoftMax(const std::vector<float>& inputs)
 
 float	crossEntropy(const std::vector<float>& yPred, const std::vector<float>& yTrue)
 {
-	float loss = 0.0;
+	float loss = 0.0f;
 	for (size_t i = 0; i < yTrue.size(); ++i)
 		if (yTrue[i] > 0)
 			loss -= std::log(yPred[i] + EPSILON);

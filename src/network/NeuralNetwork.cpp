@@ -1,4 +1,4 @@
-#include "../../include/NeuralNetwork.hpp"
+#include "NeuralNetwork.hpp"
 
 NN::NN(const size_t& nbrInputs, const size_t& nbrHiddenLayers, const size_t& nbrHiddenCells, const size_t& nbrOutputs)
 {
@@ -125,9 +125,10 @@ void	NN::trainMultiClass(const size_t& epochs, const std::vector<std::vector<flo
 		{
 			initInputs(inputs[j]);
 			feedForwardMultiClass(f);
-			accuracy = backPropagationMultiClass(f, derivatedF, expectedOutputs[j]);
+			accuracy = backPropagationMultiClass(derivatedF, expectedOutputs[j]);
 		}
 	}
+	std::cout << "Accuracy = " << (1 - accuracy) * 100 << "%\n";
 }
 
 std::vector<float>	NN::use(const std::vector<float>& inputs, float (*activHL)(const float&), float (*activO)(const float&))

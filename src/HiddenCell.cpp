@@ -1,5 +1,5 @@
-#include "../include/HiddenCell.hpp"
-#include "../include/NeuralNetwork.hpp"
+#include "HiddenCell.hpp"
+#include "NeuralNetwork.hpp"
 
 HiddenCell::HiddenCell(const size_t& nbrWeights, const size_t& index)
 {

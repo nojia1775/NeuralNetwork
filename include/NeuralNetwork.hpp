@@ -43,7 +43,7 @@ class	NN
 		void					feedForwardMultiClass(float (*f)(const float&));
 		void					initInputs(const std::vector<float>& inputs);
 		float					backPropagation(float (*loss)(const float&, const float&), float (*derivatedLoss)(const float&, const float&), float (*derivatedActivHL)(const float&), float (*derivatedActivO)(const float&), const std::vector<float>& targets);
-		float					backPropagationMultiClass(float (*f)(const float&), float (*derivatedF)(const float&), const std::vector<float>& targets);
+		float					backPropagationMultiClass(float (*derivatedF)(const float&), const std::vector<float>& targets);
 		void					train(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*loss)(const float&, const float&), float (*derivatedLoss)(const float&, const float&), float (*func1)(const float&), float (*func2)(const float&), float (*derivFunc1)(const float&), float (*derivFunc2)(const float&));
 		void					trainMultiClass(const size_t& epochs, const std::vector<std::vector<float>>& inputs, const std::vector<std::vector<float>>& expectedOutputs, float (*f)(const float&), float (*derivatedF)(const float&));
 		std::vector<float>			use(const std::vector<float>& inputs, float (*activHL)(const float&), float (*activO)(const float&));

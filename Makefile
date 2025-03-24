@@ -4,6 +4,7 @@ CXXFLAGS = -Wall -Wextra -Werror -g -MMD
 SRCS =	src/Input.cpp \
 	src/HiddenCell.cpp \
 	src/Output.cpp \
+	src/functions.cpp \
 	src/network/NeuralNetwork.cpp \
 	src/network/Json.cpp \
 	src/network/BackPropagation.cpp \
@@ -23,7 +24,7 @@ $(NAME): $(OBJS)
 
 $(OBJS_DIR)%.o: %.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -I./include
 
 clean:
 	rm -fr $(OBJS_DIR)

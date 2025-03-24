@@ -1,4 +1,4 @@
-#include "../../include/NeuralNetwork.hpp"
+#include "NeuralNetwork.hpp"
 
 void	NN::getJSON(void) const
 {

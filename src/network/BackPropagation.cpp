@@ -1,4 +1,4 @@
-#include "../../include/NeuralNetwork.hpp"
+#include "NeuralNetwork.hpp"
 
 std::vector<float>	NN::updateLastLayerWeights(float (*derivatedLoss)(const float&, const float&), float (*derivatedActivO)(const float&), const std::vector<float>& targets)
 {
@@ -293,7 +293,7 @@ float	NN::backPropagation(float (*loss)(const float&, const float&), float (*der
 	return accuracy;
 }
 
-float	NN::backPropagationMultiClass(float (*f)(const float&), float (*derivatedF)(const float&), const std::vector<float>& targets)
+float	NN::backPropagationMultiClass(float (*derivatedF)(const float&), const std::vector<float>& targets)
 {
 	if (DEBUG)
 		std::cout << "------------- BACK PROPAGATION -------------\n\n";

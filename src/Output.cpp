@@ -1,5 +1,5 @@
-#include "../include/Output.hpp"
-#include "../include/NeuralNetwork.hpp"
+#include "Output.hpp"
+#include "NeuralNetwork.hpp"
 
 Output::Output(const size_t& index) : _value(0), _bias(0), _index(index), _z(0) {}
 

@@ -1,4 +1,4 @@
-#include "../include/Input.hpp"
+#include "Input.hpp"
 
 Input::Input(const size_t& nbr_weights)
 {
