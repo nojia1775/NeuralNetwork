@@ -127,6 +127,7 @@ void	NN::trainMultiClass(const size_t& epochs, const std::vector<std::vector<flo
 			feedForwardMultiClass(f);
 			accuracy = backPropagationMultiClass(derivatedF, expectedOutputs[j]);
 		}
+		std::cout << i + 1 << "%\n";
 	}
 	std::cout << "Accuracy = " << (1 - accuracy) * 100 << "%\n";
 }
