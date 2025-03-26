@@ -1,5 +1,3 @@
-#include "include/NeuralNetwork.hpp"
-
 std::vector<std::vector<float>> datas = {
 {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.',
 '.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.',
@@ -964,66 +962,3 @@ std::vector<std::vector<float>>	expected = {
 	{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0}, // Z
 	{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0}  // Z
 };
-
-void	chargement(const float& x)
-{
-	std::cout << '[';
-	int i;
-	for (i = 0 ; i < x * 100 ; i += 2)
-		std::cout << '#';
-	for ( ; i < 100 ; i += 2)
-		std::cout << ' ';
-	std::cout << "]" << x * 100  << '%' << std::endl;
-	
-}
-
-void	normalise(std::vector<float>& vector)
-{
-	for (std::vector<float>::iterator it = vector.begin() ; it != vector.end() ; ++it)
-		*it == '#' ? *it = 1 : *it = 0;
-}
-
-void	denormalise(std::vector<float>& vector)
-{
-	for (std::vector<float>::iterator it = vector.begin() ; it != vector.end() ; ++it)
-		*it == 1 ? *it = '#' : *it = ' ';
-}
-
-
-int	main(void)
-{
-	std::vector<float> result;
-	try
-	{
-		for (auto& data : datas)
-			normalise(data);
-		NN nn(200, 3, 52, 26);
-		nn.setLearningRate(0.2);
-		nn.initNN();
-		nn.trainMultiClass(200, datas, expected, sigmoid, derivatedSigmoid);
-		nn.getJSON("test.json");
-		// NN nn("Neural_Network/logs/letters.json");
-		std::vector<float> test = {
-			'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','#','#','#','#','.','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','#','.','.','.','#','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','#','.','.','.','#','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','#','#','#','#','.','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','#','.','.','.','.','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','#','.','.','.','.','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.',
-			'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.',
-		};
-		normalise(test);
-		std::vector<float> outputs = nn.useMultiClass(test, sigmoid);
-		int i = 0;
-		for (auto output : outputs)
-		{
-			std::cout << (char)('A' + i++) << ": ";
-			chargement(output);
-		}
-	}
-	catch (const std::exception& e) { std::cout << e.what() << "\n"; }
-	return 0;
-}
